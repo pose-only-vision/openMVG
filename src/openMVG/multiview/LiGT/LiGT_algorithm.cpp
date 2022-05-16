@@ -261,34 +261,33 @@ bool LiGTProblem::SolveLiGT(const Eigen::MatrixXd& LTL,
               VectorXd& evectors){
 
   // ========================= Solve Problem by Eigen's SVD =======================
-  //  JacobiSVD<Eigen::MatrixXd> svd(LTL, ComputeFullU | ComputeFullV);
-  //  if (svd.info() != Eigen::Success)
-  //    OPENMVG_LOG_ERROR << "SVD solver failure - expect to have invalid output";
-  //  MatrixXd V = svd.matrixV();
-  //  VectorXd evectors = VectorXd::Zero(V.rows() + 3);
-  //  evectors.bottomRows(V.rows()) = V.col(V.cols() - 1);
+   JacobiSVD<Eigen::MatrixXd> svd(LTL, ComputeFullU | ComputeFullV);
+   if (svd.info() != Eigen::Success)
+     OPENMVG_LOG_ERROR << "SVD solver failure - expect to have invalid output";
+   MatrixXd V = svd.matrixV();
+   evectors.bottomRows(V.rows()) = V.col(V.cols() - 1);
 
 
-  // ========================= Solve Problem by Spectra's Eigs =======================
-  // Construct matrix operation object using the wrapper class
-  DenseSymShiftSolve<double> op(LTL);
+  // // ========================= Solve Problem by Spectra's Eigs =======================
+  // // Construct matrix operation object using the wrapper class
+  // DenseSymShiftSolve<double> op(LTL);
+  //
+  // // Construct eigen solver object with shift 0
+  // // This will find eigenvalues that are closest to 0
+  // SymEigsShiftSolver<DenseSymShiftSolve<double>> eigs(op, 1, 8, 0.0);
+  // eigs.init();
+  // eigs.compute(SortRule::LargestMagn);
+  //
+  // if (eigs.info() != CompInfo::Successful)
+  // {
+  //   OPENMVG_LOG_ERROR << " SymEigsShiftSolver failure - expect to have invalid output";
+  //   return false;
+  // }
 
-  // Construct eigen solver object with shift 0
-  // This will find eigenvalues that are closest to 0
-  SymEigsShiftSolver<DenseSymShiftSolve<double>> eigs(op, 1, 8, 0.0);
-  eigs.init();
-  eigs.compute(SortRule::LargestMagn);
+  // const Eigen::VectorXd evalues = eigs.eigenvalues();
+  // OPENMVG_LOG_INFO << "Eigenvalues found: " << evalues.transpose();
 
-  if (eigs.info() != CompInfo::Successful)
-  {
-    OPENMVG_LOG_ERROR << " SymEigsShiftSolver failure - expect to have invalid output";
-    return false;
-  }
-
-  const Eigen::VectorXd evalues = eigs.eigenvalues();
-  OPENMVG_LOG_INFO << "Eigenvalues found: " << evalues.transpose();
-
-  evectors.bottomRows( 3 * num_view_ - 3) = eigs.eigenvectors();
+  // evectors.bottomRows( 3 * num_view_ - 3) = eigs.eigenvectors();
   return true;
 }
 
