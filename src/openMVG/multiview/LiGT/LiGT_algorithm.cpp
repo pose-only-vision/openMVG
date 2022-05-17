@@ -115,8 +115,8 @@ void LiGTProblem::IdentifySign(const MatrixXd& A_lr,
   const int negative_count = judgeValue.rows() - positive_count;
   OPENMVG_LOG_INFO
     << "judgeValue: " << judgeValue.transpose() << "\n"
-    << "positive_count" << positive_count << "\n"
-    << "negative_count" << negative_count << "\n";
+    << "positive_count: " << positive_count << "\n"
+    << "negative_count: " << negative_count << "\n";
   if (positive_count < negative_count) {
     evectors = -evectors;
   }
@@ -253,12 +253,9 @@ void LiGTProblem::BuildLTL(Eigen::MatrixXd& LTL,
           if(i_view_id > 0 )
           LTL.middleRows<3>(i_view_id * 3 - 3) += LTL_i_row.rightCols(LTL_i_row.cols() - 3);
         }
-
       }
     }
-
   }
-
 }
 
 bool LiGTProblem::SolveLiGT(const Eigen::MatrixXd& LTL,
@@ -271,6 +268,9 @@ bool LiGTProblem::SolveLiGT(const Eigen::MatrixXd& LTL,
    MatrixXd V = svd.matrixV();
    evectors.bottomRows(V.rows()) = V.col(V.cols() - 1);
 
+   OPENMVG_LOG_INFO << "LTL\n" << LTL;
+   OPENMVG_LOG_INFO << "V\n" << V;
+   OPENMVG_LOG_INFO << "evectors\n" << evectors.transpose();
 
   // // ========================= Solve Problem by Spectra's Eigs =======================
   // // Construct matrix operation object using the wrapper class

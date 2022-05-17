@@ -267,7 +267,7 @@ TEST(GLOBAL_SFM, RotationAveragingL2_Translation_LIGT) {
   std::shared_ptr<Features_Provider> feats_provider =
     std::make_shared<Synthetic_Features_Provider>();
   // Add a tiny noise in 2D observations to make data more realistic
-  std::normal_distribution<double> distribution(0.0,0.0005);
+  std::normal_distribution<double> distribution(0.0,0.0);
   dynamic_cast<Synthetic_Features_Provider*>(feats_provider.get())->load(d,distribution);
 
   std::shared_ptr<Matches_Provider> matches_provider =
@@ -319,7 +319,7 @@ TEST(GLOBAL_SFM, RotationAveragingL2_Translation_LIGT_2) {
   std::shared_ptr<Features_Provider> feats_provider =
     std::make_shared<Synthetic_Features_Provider>();
   // Add a tiny noise in 2D observations to make data more realistic
-  std::normal_distribution<double> distribution(0.0,0.0005);
+  std::normal_distribution<double> distribution(0.0,0.0);
   dynamic_cast<Synthetic_Features_Provider*>(feats_provider.get())->load(d,distribution);
 
   std::shared_ptr<Matches_Provider> matches_provider =
