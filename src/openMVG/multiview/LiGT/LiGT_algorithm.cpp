@@ -110,9 +110,13 @@ void LiGTProblem::RecoverViewIds(){
 
 void LiGTProblem::IdentifySign(const MatrixXd& A_lr,
                  VectorXd& evectors) {
-  auto judgeValue = A_lr * evectors;
-  int positive_count = (judgeValue.array() > 0.0).cast<int>().sum();
-  int negative_count = judgeValue.rows() - positive_count;
+  const auto judgeValue = A_lr * evectors;
+  const int positive_count = (judgeValue.array() > 0.0).cast<int>().sum();
+  const int negative_count = judgeValue.rows() - positive_count;
+  OPENMVG_LOG_INFO
+    << "judgeValue: " << judgeValue.transpose() << "\n"
+    << "positive_count" << positive_count << "\n"
+    << "negative_count" << negative_count << "\n";
   if (positive_count < negative_count) {
     evectors = -evectors;
   }
